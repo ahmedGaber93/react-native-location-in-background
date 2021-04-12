@@ -1,0 +1,6 @@
+rootProject.name = 'LocationInBackgroundExample'
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+include ':app'
+
+include ':reactnativelocationinbackground'
+project(':reactnativelocationinbackground').projectDir = new File(rootProject.projectDir, '../../android')
