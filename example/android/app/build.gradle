@@ -204,6 +204,9 @@ dependencies {
         implementation jscFlavor
     }
 
+
+  implementation "androidx.appcompat:appcompat:${rootProject.ext.androidXCore}"
+
     implementation project(':reactnativelocationinbackground')
 }
 

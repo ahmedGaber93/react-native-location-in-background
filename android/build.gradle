@@ -54,5 +54,9 @@ repositories {
 
 dependencies {
     //noinspection GradleDynamicVersion
+
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation "androidx.appcompat:appcompat:${rootProject.ext.androidXCore}"
+    implementation "com.google.android.gms:play-services-location:${rootProject.ext.playServicesVersion}"
+
 }
