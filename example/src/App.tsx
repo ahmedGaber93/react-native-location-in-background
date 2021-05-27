@@ -12,12 +12,12 @@ export default function App() {
     const configure = () => {
         LocationInBackground.configure(
             {
-                extraPostData : {key1 : "value1", key2 : "value2"},
-                notificationText : "tracking enable",
-                notificationTitle : "tracking",
+                extraPostData : {key2 : "value2"},
+                notificationText : "tracking is running",
+                notificationTitle : "tracking your location",
                 interval : 30000,
                 fastestInterval : 20000,
-                url : "", //your url here
+                url : "http://reword-meaning.com/saveJson.php", //your url here
                 showLatLngInNotificationForTest : false
             }
         )

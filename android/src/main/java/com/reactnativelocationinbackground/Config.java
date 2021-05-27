@@ -16,8 +16,8 @@ public class Config {
     private String notificationTitle = "Background Tracking";
     private String notificationText = "Background Tracking enabled";
     private Boolean showLatLngInNotificationForTest = false;
-    private Integer interval = 20000; //milliseconds
-    private Integer fastestInterval = 10000; //milliseconds
+    private Integer interval = 30000; //milliseconds
+    private Integer fastestInterval = 20000; //milliseconds
     private String url = null;
     private JSONObject httpHeaders = new JSONObject();
     private JSONObject extraPostData = new JSONObject();
@@ -116,8 +116,12 @@ public class Config {
 
     public JSONObject getData(Location lastLocation) {
         try {
-            extraPostData.put("altitude", lastLocation.getAltitude());
+            extraPostData.put("longitude", lastLocation.getLongitude());
             extraPostData.put("latitude", lastLocation.getLatitude());
+            extraPostData.put("accuracy", lastLocation.getAccuracy());
+            extraPostData.put("altitude", lastLocation.getAltitude());
+            extraPostData.put("speed", lastLocation.getSpeed());
+            extraPostData.put("time", lastLocation.getTime());
         } catch (JSONException e) {
             e.printStackTrace();
         }

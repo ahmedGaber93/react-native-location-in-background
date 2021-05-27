@@ -1,6 +1,6 @@
 {
   "name": "react-native-location-in-background",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "tracking user location in background",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",

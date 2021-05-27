@@ -14,7 +14,6 @@ type ConfigType = {
 
 
 type LocationInBackgroundType = {
-  multiply(a: number, b: number): Promise<number>;
   startTracking(): void;
   stopTracking(): void;
   configure(config : ConfigType) : Promise<any>;

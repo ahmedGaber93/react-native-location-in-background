@@ -9,14 +9,27 @@ npm install react-native-location-in-background
 ```
 
 #### Android setup
-##### 1) - Permissions
+##### 1) - android/build.gradle
+update `build.gradle` under `android folder`.
+```java
+buildscript {
+    ext {
+        ....
+        //add this two line
+        playServicesVersion = "17.0.0" // or find latest version
+        androidXCore = "1.0.2"
+    }
+    ....
+}
+```
+##### 2) - add permissions
 Add permission in your `AndroidManifest.xml`.
 ```xml
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
 
-##### 2) - foregroundService
+##### 3) - define ForegroundService
 Add `service` in your `AndroidManifest.xml` inside `application` tag.
 ```xml
 
