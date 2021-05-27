@@ -1,9 +1,6 @@
 import * as React from 'react';
-
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import LocationInBackground from 'react-native-location-in-background';
-
-
 
 
 
@@ -12,47 +9,41 @@ import LocationInBackground from 'react-native-location-in-background';
 export default function App() {
 
 
-
-
-    const press1 = () => {
+    const configure = () => {
         LocationInBackground.configure(
             {
-                extraPostData : {key : "value", key2 : {xx : 3}},
+                extraPostData : {key1 : "value1", key2 : "value2"},
                 notificationText : "tracking enable",
-                notificationTitle : "tracking".toUpperCase(),
-                interval : 10000,
+                notificationTitle : "tracking",
+                interval : 30000,
+                fastestInterval : 20000,
+                url : "", //your url here
                 showLatLngInNotificationForTest : false
             }
         )
     };
 
 
-    const press2 = () => {
+    const startTracking = () => {
         LocationInBackground.startTracking();
     };
 
 
-    const press3 = () => {
+    const stopTracking = () => {
         LocationInBackground.stopTracking();
     };
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.btn} onPress={press1}><Text>configure</Text></TouchableOpacity>
-            <TouchableOpacity style={styles.btn} onPress={press2}><Text>start tracking</Text></TouchableOpacity>
-            <TouchableOpacity style={styles.btn} onPress={press3}><Text>stop tracking</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.btn} onPress={configure}><Text>configure</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.btn} onPress={startTracking}><Text>start tracking</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.btn} onPress={stopTracking}><Text>stop tracking</Text></TouchableOpacity>
         </View>
     );
 
 
 
 }
-
-
-
-
-
-
 
 
 const styles = StyleSheet.create({
@@ -69,6 +60,5 @@ const styles = StyleSheet.create({
     btn : {
         paddingVertical : 5,
         marginVertical : 5,
-    },
-
+    }
 });

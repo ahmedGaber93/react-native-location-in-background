@@ -29,11 +29,11 @@ const configure = (config : ConfigType) => {
   return LocationInBackground.configure(
       config
   )
-}
+};
 
 const exportLocationInBackground = {
     ...LocationInBackground,
   configure
-}
+};
 
 export default  exportLocationInBackground  as LocationInBackgroundType;
