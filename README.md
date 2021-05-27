@@ -8,15 +8,15 @@ tracking user location in background
 npm install react-native-location-in-background
 ```
 
-####Android setup
-#####Permissions
+#### Android setup
+##### 1) - Permissions
 Add permission in your `AndroidManifest.xml`.
 ```xml
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 ```
 
-#####foregroundService
+##### 2) - foregroundService
 Add `service` in your `AndroidManifest.xml` inside `application` tag.
 ```xml
 
