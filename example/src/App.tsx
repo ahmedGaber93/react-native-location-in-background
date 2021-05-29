@@ -13,6 +13,7 @@ export default function App() {
         LocationInBackground.configure(
             {
                 extraPostData : {key2 : "value2"},
+                httpHeaders : {"Authorization" : "Bearer GHFGsdaXZCPOofiegrGRGghhTHTHhrHTY546t4thitHRTYJHJMNJYTUTU"},
                 notificationText : "tracking is running",
                 notificationTitle : "tracking your location",
                 interval : 30000,

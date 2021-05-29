@@ -1,4 +1,4 @@
-import { NativeModules } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
 
 type ConfigType = {
@@ -23,8 +23,11 @@ const { LocationInBackground } = NativeModules;
 
 
 const configure = (config : ConfigType) => {
-  config.httpHeaders =  config.httpHeaders ? JSON.stringify(config.httpHeaders) : undefined;
-  config.extraPostData =  config.extraPostData ? JSON.stringify(config.extraPostData) : undefined;
+  config.httpHeaders = config.httpHeaders || {};
+  config.extraPostData = config.extraPostData || {};
+  config.httpHeaders =  Platform.OS === "ios" ? config.httpHeaders : JSON.stringify(config.httpHeaders);
+  config.extraPostData =  Platform.OS === "ios" ? config.extraPostData : JSON.stringify(config.extraPostData);
+
   return LocationInBackground.configure(
       config
   )
