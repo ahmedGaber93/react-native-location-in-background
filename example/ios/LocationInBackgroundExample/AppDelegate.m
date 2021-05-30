@@ -51,7 +51,7 @@ static void InitializeFlipper(UIApplication *application) {
   [self.window makeKeyAndVisible];
   
   if (launchOptions[UIApplicationLaunchOptionsLocationKey]) {
-    //[LocationService sharedLocationService];
+    [[LocationService sharedLocationService] handleNewLocation];
   }
   return YES;
 }

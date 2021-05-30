@@ -17,9 +17,16 @@
 
 + (LocationService *)sharedLocationService;
 - (void)setConfig:(NSDictionary *)config;
-- (void)startTracking;
-- (void)stotTracking;
+- (void)requestPermission:(void (^ _Nonnull)(NSNumber *))resolve
+                 rejecter:(void (^ _Nonnull)(NSError * _Nonnull))reject;
 
+- (void)checkPermission:(void (^ _Nonnull)(NSNumber *))resolve
+                 rejecter:(void (^ _Nonnull)(NSError * _Nonnull))reject;
+
+- (void)forceOpenSetting;
+- (void)startTracking;
+- (void)stopTracking;
+- (void)handleNewLocation;
 @end
 
 #endif /* LocationService_h */

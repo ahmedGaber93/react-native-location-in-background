@@ -17,7 +17,9 @@
 static LocationService *_sharedLocationService = nil;
 CLLocationManager *_locationManager;
 
-
+void (^_resolve)(NSNumber *status);
+void (^_reject)(NSError *error);
+BOOL isTrackingStart = NO;
 
 
 +(LocationService*)sharedLocationService{
@@ -46,86 +48,150 @@ CLLocationManager *_locationManager;
         _locationManager = [[CLLocationManager alloc] init];
         _locationManager.delegate = self;
         _locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
-        _locationManager.distanceFilter = 50;
-        [self checkLocationAccess];
-        [self startTracking];
+        _locationManager.allowsBackgroundLocationUpdates = true;
     }   return self;
 }
 
 
-
-
-
-- (void)checkLocationAccess {
+- (void)requestPermission:(void (^ _Nonnull)(NSNumber *))resolve
+                 rejecter:(void (^ _Nonnull)(NSError * _Nonnull))reject{
+    _reject = reject;
+    _resolve = resolve;
+    
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     switch (status) {
 
-    // custom methods after each case
-
         case kCLAuthorizationStatusDenied:
-
+            _resolve([NSNumber numberWithInt:1]);
             break;
         case kCLAuthorizationStatusRestricted:
-
+            _resolve([NSNumber numberWithInt:2]);
             break;
         case kCLAuthorizationStatusNotDetermined:
             [_locationManager requestWhenInUseAuthorization];
             break;
         case kCLAuthorizationStatusAuthorizedAlways:
+            _resolve([NSNumber numberWithInt:4]);
             break;
         case kCLAuthorizationStatusAuthorizedWhenInUse:
-            [_locationManager requestAlwaysAuthorization];
+            _resolve([NSNumber numberWithInt:5]);
+            break;
+    }
+}
+
+
+- (void)checkPermission:(void (^ _Nonnull)(NSNumber *))resolve
+                 rejecter:(void (^ _Nonnull)(NSError * _Nonnull))reject{
+    
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    switch (status) {
+
+        case kCLAuthorizationStatusDenied:
+            resolve([NSNumber numberWithInt:1]);
+            break;
+        case kCLAuthorizationStatusRestricted:
+            resolve([NSNumber numberWithInt:2]);
+            break;
+        case kCLAuthorizationStatusNotDetermined:
+            resolve([NSNumber numberWithInt:3]);
+            break;
+        case kCLAuthorizationStatusAuthorizedAlways:
+            resolve([NSNumber numberWithInt:4]);
+            break;
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            resolve([NSNumber numberWithInt:5]);
             break;
     }
 }
 
 
 
+
+
+
+
 - (void)locationManager:(CLLocationManager *)manager
      didUpdateLocations:(NSArray *)locations{
-    
     CLLocation *location = locations.lastObject;
-    
     [self sendToServer:location];
-
-    
 }
 
 
 
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    
+    
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
-        [_locationManager requestAlwaysAuthorization];
-        NSLog(@"allowed"); // allowed
+        if (_locationManager) {
+            [_locationManager requestAlwaysAuthorization];
+            if(isTrackingStart){
+                [_locationManager startMonitoringSignificantLocationChanges];
+            }
+        }
+    }
+    else if (status == kCLAuthorizationStatusAuthorizedAlways) {
+        if (_resolve) {
+            _resolve([NSNumber numberWithInt:4]);
+        }
     }
     else if (status == kCLAuthorizationStatusDenied) {
-        NSLog(@"denied"); // denied
+        if (_resolve) {
+            _resolve([NSNumber numberWithInt:1]);
+        }
     }
+    else if (status == kCLAuthorizationStatusRestricted) {
+        if (_resolve) {
+            _resolve([NSNumber numberWithInt:2]);
+        }
+    }
+    
+    
 }
 
 
 -(void)setConfig:(NSDictionary *)config{
     
     [[NSUserDefaults standardUserDefaults] setObject:config forKey:@"LocationInBackgroundConfigKey"];
-    //[LocationService sharedLocationService];
-    NSLog(@"%@",[config objectForKey:@"extraPostData"]);
-    
-    
 }
+
+
+
+
 
 
 -(void)startTracking{
-    [_locationManager startMonitoringSignificantLocationChanges];
-    
+    isTrackingStart = YES;
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    if(status == kCLAuthorizationStatusAuthorizedAlways){
+        [_locationManager startMonitoringSignificantLocationChanges];
+    }
+    else if(status == kCLAuthorizationStatusAuthorizedWhenInUse){
+        [_locationManager startMonitoringSignificantLocationChanges];
+    }
+    else if(status == kCLAuthorizationStatusNotDetermined){
+        [_locationManager requestWhenInUseAuthorization];
+    }
 }
 
 
 
--(void)stotTracking{
+-(void)stopTracking{
+    isTrackingStart = NO;
     [_locationManager stopMonitoringSignificantLocationChanges];
-
 }
+
+
+
+-(void)handleNewLocation{
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    if(status == kCLAuthorizationStatusAuthorizedAlways){
+        [_locationManager startMonitoringSignificantLocationChanges];
+    }
+}
+
+
+
 
 -(void)sendToServer:(CLLocation *) location{
     NSDictionary * config = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"LocationInBackgroundConfigKey"];

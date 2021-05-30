@@ -50,6 +50,63 @@ RCT_REMAP_METHOD(startTracking,
 
 
 
+RCT_REMAP_METHOD(stopTracking,
+                 stopTrackingWithResolver:(RCTPromiseResolveBlock)resolve
+                 withRejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+    [[LocationService sharedLocationService] stopTracking];
+ 
+}
+
+
+
+
+
+RCT_REMAP_METHOD(requestPermission,
+                 requestWithResolver:(RCTPromiseResolveBlock)resolve
+                 withRejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+    [[LocationService sharedLocationService] requestPermission:^(NSNumber *status) {
+        resolve(status);
+      } rejecter:^(NSError *error) {
+        
+          
+      }];
+ 
+}
+
+
+
+RCT_REMAP_METHOD(iosCheckPermission,
+                 checkPermissionWithResolver:(RCTPromiseResolveBlock)resolve
+                 withRejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+    [[LocationService sharedLocationService] checkPermission:^(NSNumber *status) {
+        resolve(status);
+      } rejecter:^(NSError *error) {
+        
+          
+      }];
+ 
+}
+
+
+
+
+
+RCT_REMAP_METHOD(iosOpenSettings,
+                 openWithResolver:(RCTPromiseResolveBlock)resolve
+                 withRejecter:(RCTPromiseRejectBlock)reject)
+{
+    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+ 
+}
+
+
 
 
 

@@ -1,6 +1,15 @@
 import { NativeModules, Platform } from 'react-native';
 
 
+enum IosStatus {
+  Denied = 1,
+  Restricted,
+  NotDetermined,
+  Always,
+  WhenInUse,
+}
+
+
 type ConfigType = {
   notificationTitle? : string;
   notificationText? : string;
@@ -15,6 +24,9 @@ type ConfigType = {
 
 type LocationInBackgroundType = {
   startTracking(): void;
+  requestPermission(): Promise<any>;
+  iosCheckPermission(): Promise<IosStatus>;
+  iosOpenSettings(): void;
   stopTracking(): void;
   configure(config : ConfigType) : Promise<any>;
 };
@@ -33,9 +45,20 @@ const configure = (config : ConfigType) => {
   )
 };
 
+
+const iosCheckPermission = () => {
+  return Platform.OS === "ios" ? LocationInBackground.iosCheckPermission() : null;
+};
+
+const iosOpenSettings = () => {
+  return Platform.OS === "ios" ? LocationInBackground.iosOpenSettings() : null;
+};
+
 const exportLocationInBackground = {
     ...LocationInBackground,
-  configure
+    configure,
+    iosCheckPermission,
+    iosOpenSettings,
 };
 
 export default  exportLocationInBackground  as LocationInBackgroundType;
