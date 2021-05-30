@@ -21,6 +21,7 @@ public class Config {
     private String url = null;
     private JSONObject httpHeaders = new JSONObject();
     private JSONObject extraPostData = new JSONObject();
+    private JSONObject paramsNames = new JSONObject();
 
 
 
@@ -62,6 +63,19 @@ public class Config {
 
     public void setExtraPostData(JSONObject extraPostData) {
         this.extraPostData = extraPostData;
+    }
+
+
+    public void setParamsNames(JSONObject paramsNames) {
+        this.paramsNames = paramsNames;
+    }
+
+
+    public String getParamName(String paramName) throws JSONException {
+        if (this.paramsNames.has(paramName)){
+            return this.paramsNames.getString(paramName);
+        }
+        return paramName;
     }
 
 
@@ -116,12 +130,12 @@ public class Config {
 
     public JSONObject getData(Location lastLocation) {
         try {
-            extraPostData.put("longitude", lastLocation.getLongitude());
-            extraPostData.put("latitude", lastLocation.getLatitude());
-            extraPostData.put("accuracy", lastLocation.getAccuracy());
-            extraPostData.put("altitude", lastLocation.getAltitude());
-            extraPostData.put("speed", lastLocation.getSpeed());
-            extraPostData.put("time", lastLocation.getTime());
+            extraPostData.put(getParamName("longitude"), lastLocation.getLongitude());
+            extraPostData.put(getParamName("latitude"), lastLocation.getLatitude());
+            extraPostData.put(getParamName("accuracy"), lastLocation.getAccuracy());
+            extraPostData.put(getParamName("altitude"), lastLocation.getAltitude());
+            extraPostData.put(getParamName("speed"), lastLocation.getSpeed());
+            extraPostData.put(getParamName("time"), lastLocation.getTime());
         } catch (JSONException e) {
             e.printStackTrace();
         }

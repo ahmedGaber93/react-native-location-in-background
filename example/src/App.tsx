@@ -10,7 +10,15 @@ export default function App() {
     React.useEffect(() => {
         LocationInBackground.configure(
             {
-                extraPostData : {key1 : "value1", key2 : "value2"},
+                extraPostData : {
+                    key1 : "value1",
+                    key2 : "value2"
+                },
+                paramsNames : {
+                    latitude : "lat",
+                    longitude : "lng",
+                    time : "lastSync"
+                },
                 httpHeaders : {"header1" : "header value1", "header2" : "header value2"},
                 notificationText : "tracking is running",
                 notificationTitle : "tracking your location",
@@ -19,7 +27,7 @@ export default function App() {
                 url : "", //your url here
             }
         )
-    }, [])
+    }, []);
 
 
     const startTracking = () => {

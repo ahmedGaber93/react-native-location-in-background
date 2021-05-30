@@ -19,12 +19,12 @@ type ConfigType = {
   url? : string;
   httpHeaders? : any;
   extraPostData? : any;
+  paramsNames? : any;
 };
 
 
 type LocationInBackgroundType = {
   startTracking(): void;
-  requestPermission(): Promise<any>;
   iosCheckPermission(): Promise<IosStatus>;
   iosOpenSettings(): void;
   stopTracking(): void;
@@ -36,9 +36,18 @@ const { LocationInBackground } = NativeModules;
 
 const configure = (config : ConfigType) => {
   config.httpHeaders = config.httpHeaders || {};
-  config.extraPostData = config.extraPostData || {};
+  config.extraPostData = config.extraPostData || {
+    latitude : "latitude",
+    longitude : "longitude",
+    accuracy : "accuracy",
+    altitude : "altitude",
+    speed : "speed",
+    time : "time",
+  };
+  config.paramsNames = config.paramsNames || {};
   config.httpHeaders =  Platform.OS === "ios" ? config.httpHeaders : JSON.stringify(config.httpHeaders);
   config.extraPostData =  Platform.OS === "ios" ? config.extraPostData : JSON.stringify(config.extraPostData);
+  config.paramsNames =  Platform.OS === "ios" ? config.paramsNames : JSON.stringify(config.paramsNames);
 
   return LocationInBackground.configure(
       config

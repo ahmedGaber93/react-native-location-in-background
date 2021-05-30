@@ -155,6 +155,20 @@ public class LocationInBackgroundModule extends ReactContextBaseJavaModule {
         }
 
 
+
+        if (config.hasKey("paramsNames") && !config.isNull("paramsNames")) {
+            try {
+                JSONObject jsonObject = new JSONObject(config.getString("paramsNames"));
+
+                Log.i(TAG, "config paramsNames : " + jsonObject.toString());
+                mConfig.setParamsNames(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                promise.reject(ERROR_INVALID_CONFIG , "LocationInBackground configure error: paramsNames type not valid");
+            }
+        }
+
+
         promise.resolve("LocationInBackground configure successfully");
 
         mService.setConfig(mConfig);

@@ -5,7 +5,7 @@
 //  Created by user179267 on 5/27/21.
 //  Copyright © 2021 Facebook. All rights reserved.
 //
- 
+
 #import <Foundation/Foundation.h>
 #import <LocationService.h>
 #import <CoreLocation/CoreLocation.h>
@@ -57,7 +57,7 @@ BOOL isTrackingStart = NO;
                  rejecter:(void (^ _Nonnull)(NSError * _Nonnull))reject{
     _reject = reject;
     _resolve = resolve;
-    
+
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     switch (status) {
 
@@ -82,7 +82,7 @@ BOOL isTrackingStart = NO;
 
 - (void)checkPermission:(void (^ _Nonnull)(NSNumber *))resolve
                  rejecter:(void (^ _Nonnull)(NSError * _Nonnull))reject{
-    
+
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     switch (status) {
 
@@ -120,8 +120,8 @@ BOOL isTrackingStart = NO;
 
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    
-    
+
+
     if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
         if (_locationManager) {
             [_locationManager requestAlwaysAuthorization];
@@ -145,13 +145,13 @@ BOOL isTrackingStart = NO;
             _resolve([NSNumber numberWithInt:2]);
         }
     }
-    
-    
+
+
 }
 
 
 -(void)setConfig:(NSDictionary *)config{
-    
+
     [[NSUserDefaults standardUserDefaults] setObject:config forKey:@"LocationInBackgroundConfigKey"];
 }
 
@@ -195,45 +195,48 @@ BOOL isTrackingStart = NO;
 
 -(void)sendToServer:(CLLocation *) location{
     NSDictionary * config = [[NSUserDefaults standardUserDefaults] dictionaryForKey:@"LocationInBackgroundConfigKey"];
-    
-    
+
+
     NSString * latitude = [NSString stringWithFormat:@"%.6f", location.coordinate.latitude];
     NSString * longitude = [NSString stringWithFormat:@"%.6f", location.coordinate.longitude];
 
     NSString * url = [config objectForKey:@"url"];
     NSDictionary * extraPostData = [config objectForKey:@"extraPostData"];
     NSDictionary * httpHeaders = [config objectForKey:@"httpHeaders"];
+    NSDictionary * paramsNames = [config objectForKey:@"paramsNames"];
 
 
     NSDictionary *dic = @{
         @"latitude" : latitude,
         @"longitude" : longitude,
-        
     };
-    
-    NSMutableDictionary * Dic2 = [dic mutableCopy];
+
+    NSMutableDictionary *Dic2 =  [[NSMutableDictionary alloc] init];
+    [Dic2 setObject:latitude forKey:paramsNames[@"latitude"]];
+    [Dic2 setObject:longitude forKey:paramsNames[@"longitude"]];
+
     [Dic2 addEntriesFromDictionary:extraPostData];
-    
-    
+
+
     NSError *error = nil;
-    
+
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[Dic2 copy]
          options:NSJSONWritingPrettyPrinted error:&error];
-    
-    
-    
+
+
+
     NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
-    
+
     [urlRequest setHTTPBody:jsonData];
     [urlRequest setHTTPMethod:@"POST"];
-    
+
     for (NSString* key in httpHeaders) {
         [urlRequest setValue:httpHeaders[key] forHTTPHeaderField:key];
     }
-    
-    
 
-    
+
+
+
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:urlRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
@@ -249,9 +252,9 @@ BOOL isTrackingStart = NO;
         }
     }];
     [dataTask resume];
-    
-    
-    
+
+
+
 }
 
 

@@ -1,7 +1,13 @@
 # react-native-location-in-background
 
-tracking user location in background
+tracking user location all time in android && ios platform in background && foreground without killing.
 
+## how it work?
+##### 1) - android
+use `ForegroundService` with notification.
+
+##### 2) - ios
+use foreground service with notification.
 ## Installation
 
 ```sh
@@ -34,7 +40,7 @@ export default function App() {
                 notificationTitle : "tracking your location",
                 interval : 30000,
                 fastestInterval : 20000,
-                url : "p", //your url here
+                url : "", //your url here
             }
         )
     }, [])
