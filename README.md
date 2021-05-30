@@ -8,72 +8,36 @@ tracking user location in background
 npm install react-native-location-in-background
 ```
 
-#### Android setup
-##### 1) - android/build.gradle
-update `build.gradle` under `android folder`.
-```java
-buildscript {
-    ext {
-        ....
-        //add this two line
-        playServicesVersion = "17.0.0" // or find latest version
-        androidXCore = "1.0.2"
-    }
-    ....
-}
-```
-##### 2) - add permissions
-Add permission in your `AndroidManifest.xml`.
-```xml
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-```
+* [Android setup.](https://github.com/ahmedGaber93/react-native-location-in-background/tree/master/doc/ANDROID_SETUP.md)
+* [Ios setup.](https://github.com/ahmedGaber93/react-native-location-in-background/tree/master/doc/IOS_SETUP.md)
 
-##### 3) - define ForegroundService
-Add `service` in your `AndroidManifest.xml` inside `application` tag.
-```xml
-
-<application
-  ...>
-  
-  <!-- Foreground services in Q+ require type. -->
-  <service
-    android:name="com.reactnativelocationinbackground.LocationUpdatesService"
-    android:enabled="true"
-    android:exported="true"
-    android:foregroundServiceType="location" />
-
-
-
-</application>
-
-
-```
 
 ## Usage
 
 ```js
+
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert, Platform } from 'react-native';
 import LocationInBackground from 'react-native-location-in-background';
+
 
 
 export default function App() {
 
-    
-    const configure = () => {
+
+    React.useEffect(() => {
         LocationInBackground.configure(
             {
                 extraPostData : {key1 : "value1", key2 : "value2"},
-                notificationText : "tracking enable",
-                notificationTitle : "tracking",
+                httpHeaders : {"header1" : "header value1", "header2" : "header value2"},
+                notificationText : "tracking is running",
+                notificationTitle : "tracking your location",
                 interval : 30000,
                 fastestInterval : 20000,
-                url : "", //your url here
-                showLatLngInNotificationForTest : false
+                url : "p", //your url here
             }
         )
-    };
+    }, [])
 
 
     const startTracking = () => {
@@ -81,15 +45,54 @@ export default function App() {
     };
 
 
+    const iosCheckPermission = () => {
+        LocationInBackground.iosCheckPermission()
+        .then((x) => {
+            // @ts-ignore
+            alert(x);
+        });
+    };
+
+
+    const iosOpenSettings = () => {
+        Alert.alert(
+            "enable  always location permission",
+            "to tracking user in background you must set location permission to always.",
+            [
+              {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel",
+              },
+              { text: "OK", onPress: () => LocationInBackground.iosOpenSettings() }
+            ]
+          );
+
+    };
     const stopTracking = () => {
         LocationInBackground.stopTracking();
     };
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.btn} onPress={configure}><Text>configure</Text></TouchableOpacity>
             <TouchableOpacity style={styles.btn} onPress={startTracking}><Text>start tracking</Text></TouchableOpacity>
+            <Text style={styles.heading}>ask for permission and then start Tracking.</Text>
+
+            <View style={styles.line} />
+
             <TouchableOpacity style={styles.btn} onPress={stopTracking}><Text>stop tracking</Text></TouchableOpacity>
+
+
+            {Platform.OS === "ios" &&
+            <>
+            <View style={styles.line} />
+            <Text style={styles.heading}>in ios if the user don't accept always permission you can open "iphone settings app" and force user to accept it</Text>
+
+            <TouchableOpacity style={styles.btn} onPress={iosCheckPermission}><Text>ios check Permission</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.btn} onPress={iosOpenSettings}><Text>ios open Settings to force Permission</Text></TouchableOpacity>
+
+            </>
+            }
         </View>
     );
 
@@ -104,16 +107,33 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    box: {
-        width: 60,
-        height: 60,
+    line: {
+        height : 1,
+        width : "90%",
         marginVertical: 20,
+        backgroundColor : "#999"
     },
     btn : {
         paddingVertical : 5,
         marginVertical : 5,
+        borderWidth : 1,
+        borderColor : "#0099cc",
+        paddingHorizontal : 15,
+    },
+    btn2 : {
+        paddingVertical : 5,
+        marginVertical : 5,
+        borderWidth : 1,
+        borderColor : "#999",
+        paddingHorizontal : 15,
+        width : "90%",
+    },
+    heading : {
+        padding : 15,
+        textAlign : "center",
     }
 });
+
 ```
 
 ## Contributing

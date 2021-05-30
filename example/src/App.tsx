@@ -4,8 +4,6 @@ import LocationInBackground from 'react-native-location-in-background';
 
 
 
-
-
 export default function App() {
 
 
@@ -18,7 +16,7 @@ export default function App() {
                 notificationTitle : "tracking your location",
                 interval : 30000,
                 fastestInterval : 20000,
-                url : "http://reword-meaning.com/saveJson.php", //your url here
+                url : "", //your url here
             }
         )
     }, [])
@@ -32,10 +30,11 @@ export default function App() {
     const iosCheckPermission = () => {
         LocationInBackground.iosCheckPermission()
         .then((x) => {
+            // @ts-ignore
             alert(x);
         });
     };
-    
+
 
     const iosOpenSettings = () => {
         Alert.alert(
@@ -50,7 +49,7 @@ export default function App() {
               { text: "OK", onPress: () => LocationInBackground.iosOpenSettings() }
             ]
           );
-        
+
     };
     const stopTracking = () => {
         LocationInBackground.stopTracking();
@@ -60,20 +59,20 @@ export default function App() {
         <View style={styles.container}>
             <TouchableOpacity style={styles.btn} onPress={startTracking}><Text>start tracking</Text></TouchableOpacity>
             <Text style={styles.heading}>ask for permission and then start Tracking.</Text>
-            
+
             <View style={styles.line} />
 
             <TouchableOpacity style={styles.btn} onPress={stopTracking}><Text>stop tracking</Text></TouchableOpacity>
 
-            
+
             {Platform.OS === "ios" &&
             <>
             <View style={styles.line} />
             <Text style={styles.heading}>in ios if the user don't accept always permission you can open "iphone settings app" and force user to accept it</Text>
-            
+
             <TouchableOpacity style={styles.btn} onPress={iosCheckPermission}><Text>ios check Permission</Text></TouchableOpacity>
             <TouchableOpacity style={styles.btn} onPress={iosOpenSettings}><Text>ios open Settings to force Permission</Text></TouchableOpacity>
-            
+
             </>
             }
         </View>
