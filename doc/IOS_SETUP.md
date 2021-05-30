@@ -15,12 +15,12 @@
 
 ##### 2) - enabled location updates.
 
-![img1](https://github.com/ahmedGaber93/react-native-location-in-background/tree/master/doc/img1.gif)
+![img1](https://raw.githubusercontent.com/ahmedGaber93/react-native-location-in-background/master/doc/img1.gif)
 
 
 
 ##### 3) - edit `AppDelegate.m`.
-```c#
+```c+
 
  //add this line
 #import <LocationService.h>
