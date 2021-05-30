@@ -4,10 +4,12 @@ tracking user location all time in android && ios platform in background && fore
 
 ## how it work?
 ##### 1) - android
-use `ForegroundService` with notification.
+* use `ForegroundService` with notification.<br>
+* the location update every n second.
 
 ##### 2) - ios
-use foreground service with notification.
+* use `CLLocationManager` with Significant Location Updates `startMonitoringSignificantLocationChanges`.<br>
+* the location updates based on significant location changes [read here](https://developer.apple.com/documentation/corelocation/cllocationmanager/1423531-startmonitoringsignificantlocati?language=objc).
 ## Installation
 
 ```sh
