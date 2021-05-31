@@ -30,7 +30,12 @@ RCT_REMAP_METHOD(configure,
                  withRejecter:(RCTPromiseRejectBlock)reject)
 {
     
-    [[LocationService sharedLocationService] setConfig:config];
+    [[LocationService sharedLocationService] setConfig:config setConfigWithResolve:^(NSString *status) {
+        resolve(status);
+      } rejecter:^(NSError *error) {
+        
+          
+      }];
  
 }
 

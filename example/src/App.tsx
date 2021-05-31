@@ -26,7 +26,9 @@ export default function App() {
                 fastestInterval : 20000,
                 url : "", //your url here
             }
-        )
+        ).then((results : String) => {
+            console.log("LocationInBackground.configure", results);
+        }).catch(e => console.error("LocationInBackground.configure error :", e.message));
     }, []);
 
 

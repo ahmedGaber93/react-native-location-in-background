@@ -16,7 +16,8 @@
 @interface LocationService : NSObject <CLLocationManagerDelegate>
 
 + (LocationService *)sharedLocationService;
-- (void)setConfig:(NSDictionary *)config;
+- (void)setConfig:(NSDictionary *)config setConfigWithResolve:(void (^ _Nonnull)(NSString *))resolve
+         rejecter:(void (^ _Nonnull)(NSError * _Nonnull))reject;
 - (void)requestPermission:(void (^ _Nonnull)(NSNumber *))resolve
                  rejecter:(void (^ _Nonnull)(NSError * _Nonnull))reject;
 

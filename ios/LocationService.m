@@ -150,9 +150,14 @@ BOOL isTrackingStart = NO;
 }
 
 
--(void)setConfig:(NSDictionary *)config{
+-(void)setConfig:(NSDictionary *)config
+                setConfigWithResolve :(void (^ _Nonnull)(NSString *))resolve
+                rejecter:(void (^ _Nonnull)(NSError * _Nonnull))reject{
 
     [[NSUserDefaults standardUserDefaults] setObject:config forKey:@"LocationInBackgroundConfigKey"];
+    
+    
+    resolve(@"LocationInBackground configure successfully");
 }
 
 
