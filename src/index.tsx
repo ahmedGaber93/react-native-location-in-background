@@ -46,7 +46,7 @@ const { LocationInBackground } = NativeModules;
 const configure = (config : ConfigType) => {
   config.httpHeaders = config.httpHeaders || {};
   config.extraPostData = config.extraPostData || {};
-  
+
 
   config.paramsNames = {
     ...defaultParamsNames,
@@ -57,6 +57,10 @@ const configure = (config : ConfigType) => {
   config.extraPostData =  Platform.OS === "ios" ? config.extraPostData : JSON.stringify(config.extraPostData);
   config.paramsNames =  Platform.OS === "ios" ? config.paramsNames : JSON.stringify(config.paramsNames);
 
+  for (const property in config.httpHeaders) {
+    config.httpHeaders[property] = config.httpHeaders[property]?.toString() || "";
+  }
+  
   return LocationInBackground.configure(
       config
   )
