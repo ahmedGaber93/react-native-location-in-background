@@ -60,7 +60,7 @@ const configure = (config : ConfigType) => {
   for (const property in config.httpHeaders) {
     config.httpHeaders[property] = config.httpHeaders[property]?.toString() || "";
   }
-  
+
   return LocationInBackground.configure(
       config
   )
