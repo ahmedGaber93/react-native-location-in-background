@@ -199,22 +199,31 @@ BOOL isTrackingStart = NO;
 
     NSString * latitude = [NSString stringWithFormat:@"%.6f", location.coordinate.latitude];
     NSString * longitude = [NSString stringWithFormat:@"%.6f", location.coordinate.longitude];
-
+    NSString * altitude = [NSString stringWithFormat:@"%.2f", location.altitude];
+    NSString * accuracy = [NSString stringWithFormat:@"%.2f", location.horizontalAccuracy];
+    
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *time = [formatter stringFromDate:location.timestamp];
+    
+    
+    
     NSString * url = [config objectForKey:@"url"];
     NSDictionary * extraPostData = [config objectForKey:@"extraPostData"];
     NSDictionary * httpHeaders = [config objectForKey:@"httpHeaders"];
     NSDictionary * paramsNames = [config objectForKey:@"paramsNames"];
 
 
-    NSDictionary *dic = @{
-        @"latitude" : latitude,
-        @"longitude" : longitude,
-    };
+    
 
     NSMutableDictionary *Dic2 =  [[NSMutableDictionary alloc] init];
     [Dic2 setObject:latitude forKey:paramsNames[@"latitude"]];
     [Dic2 setObject:longitude forKey:paramsNames[@"longitude"]];
-
+    [Dic2 setObject:altitude forKey:paramsNames[@"altitude"]];
+    [Dic2 setObject:accuracy forKey:paramsNames[@"accuracy"]];
+    [Dic2 setObject:time forKey:paramsNames[@"time"]];
+    
     [Dic2 addEntriesFromDictionary:extraPostData];
 
 

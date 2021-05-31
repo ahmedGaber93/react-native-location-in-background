@@ -31,20 +31,28 @@ type LocationInBackgroundType = {
   configure(config : ConfigType) : Promise<any>;
 };
 
+const defaultParamsNames = {
+  latitude : "latitude",
+  longitude : "longitude",
+  accuracy : "accuracy",
+  altitude : "altitude",
+  speed : "speed",
+  time : "time",
+};
+
 const { LocationInBackground } = NativeModules;
 
 
 const configure = (config : ConfigType) => {
   config.httpHeaders = config.httpHeaders || {};
-  config.extraPostData = config.extraPostData || {
-    latitude : "latitude",
-    longitude : "longitude",
-    accuracy : "accuracy",
-    altitude : "altitude",
-    speed : "speed",
-    time : "time",
+  config.extraPostData = config.extraPostData || {};
+  
+
+  config.paramsNames = {
+    ...defaultParamsNames,
+    ...(config.paramsNames || {})
   };
-  config.paramsNames = config.paramsNames || {};
+
   config.httpHeaders =  Platform.OS === "ios" ? config.httpHeaders : JSON.stringify(config.httpHeaders);
   config.extraPostData =  Platform.OS === "ios" ? config.extraPostData : JSON.stringify(config.extraPostData);
   config.paramsNames =  Platform.OS === "ios" ? config.paramsNames : JSON.stringify(config.paramsNames);
